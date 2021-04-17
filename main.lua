@@ -38,9 +38,13 @@ screen = require "libs/shack"
 screen:setDimensions(push:getDimensions())
 
 player = require "Player"
+blocks = require "Blocks"
 
 bg_img = lg.newImage("bg.png")
 buffer = 4
+
+font = lg.newFont(35)
+number_blocks = 3
 
 function love.draw()
     screen:apply()
@@ -49,6 +53,9 @@ function love.draw()
     lg.draw(bg_img)
 
     player:Draw()
+    blocks:Draw()
+
+    lg.draw(main_text, 5, 5)
 
     push:finish()
 end
@@ -56,11 +63,17 @@ end
 function love.update(dt)
     screen:update(dt)
     player:Update(dt)
+    blocks:Update(dt)
+    main_text = lg.newText(font, "wasd / arrow keys to move + space to jump\nClick to place blocks\n"..tostring(number_blocks))
 end
 
 function love.keypressed(key)
     if key == "escape" then le.quit() end
     if key == "return" and lk.isDown("lalt") then push:switchFullscreen() end
+end
+
+function love.mousepressed(x, y, button)
+    blocks:Click()
 end
 
 function love.resize(w, h)
